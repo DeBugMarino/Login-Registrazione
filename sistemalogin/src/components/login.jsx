@@ -1,9 +1,13 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Login() {
   const [data, setData] = useState({});
   const [message, setMessage] = useState(null);
-  const [user, setUser] = useState(null);
+  const navigazione = useNavigate();
+  const { user, setUser } = useContext(AuthContext);
 
   function handleChange(event) {
     setData((prev) => ({
@@ -23,10 +27,14 @@ export default function Login() {
       });
 
       const result = await response.json();
-      console.log(result);
-      if (result.ok) {
+
+      if (response.ok) {
         setMessage(result.message);
         setUser(result.user);
+        console.log(user);
+        setTimeout(() => {
+          navigazione("/dashboard");
+        }, 5000);
       } else {
         setMessage(result.message);
       }
