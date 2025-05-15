@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase/firebase";
 
 export default function Login() {
   const [data, setData] = useState({});
-  const { user, login, message } = useAuth();
-  const navigazione = useNavigate();
-
+  const [message, setMessage] = useState("");
+  const navigate = useNavigate();
   function handleChange(event) {
     setData((prev) => ({
       ...prev,
@@ -17,15 +17,11 @@ export default function Login() {
   async function handleSubmit(event) {
     event.preventDefault();
     try {
-      const logged = await login(data);
-      console.log(user);
-      if (user) {
-        setTimeout(() => {
-          navigazione("/dashboard");
-        }, 5000);
-      }
+      await signInWithEmailAndPassword(auth, data.email, data.password);
+      // Il login è automatico, Firebase salva tutto
+      navigate("/dashboard");
     } catch (error) {
-      console.error(error);
+      console.error("Login fallito", error.message);
     }
   }
 
