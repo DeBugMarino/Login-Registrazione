@@ -6,8 +6,11 @@ const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState({});
   const [message, setMessage] = useState(null);
+    const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
 
   async function login(data) {
     try {
@@ -18,12 +21,18 @@ export const AuthProvider = ({ children }) => {
       });
 
       const result = await response.json();
-
       if (response.ok) {
         setMessage(result.message);
         setUser(result.user);
-        console.log("if");
-        console.log(result.user);
+        localStorage.setItem("user", JSON.stringify(result.user)); // <-- aggiunto
+        return result.user;
+      // }
+      // if (response.ok) {
+      //   setMessage(result.message);
+      //   setUser(result.user);
+      //   console.log("if");
+      //   console.log(result.user);
+      //   return result.user;
       } else {
         setMessage(result.message);
         setUser(null);
@@ -36,9 +45,13 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
     }
   }
+  function logout(){
+    localStorage.removeItem("user")
+
+  }
 
   return (
-    <AuthContext.Provider value={{ user, login, message }}>
+    <AuthContext.Provider value={{ user, login, message, logout }}>
       {children}
     </AuthContext.Provider>
   );
