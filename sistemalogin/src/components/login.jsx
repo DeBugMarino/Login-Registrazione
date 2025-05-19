@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
   const [data, setData] = useState({});
-  const [message, setMessage] = useState(null);
-  const [user, setUser] = useState(null);
+  const { user, login, message } = useAuth();
+  const navigazione = useNavigate();
 
   function handleChange(event) {
     setData((prev) => ({
@@ -14,25 +16,16 @@ export default function Login() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-
     try {
-      const response = await fetch("http://localhost:3000/login", {
-        method: "POST",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      const result = await response.json();
-      console.log(result);
-      if (result.ok) {
-        setMessage(result.message);
-        setUser(result.user);
-      } else {
-        setMessage(result.message);
+      const logged = await login(data);
+      console.log(logged);
+      if (logged) {
+        setTimeout(() => {
+          navigazione("/dashboard");
+        }, 5000);
       }
     } catch (error) {
       console.error(error);
-      setMessage("errore");
     }
   }
 
@@ -54,14 +47,18 @@ export default function Login() {
         <button type="submit">login</button>
       </form>
       {message && <p>{message}</p>}
-      {user && (
+      {/* {user && (
         <div>
           <p>{user.nome}</p>
           <p>{user.email}</p>
           <p>{user.eta}</p>
         </div>
+<<<<<<< HEAD
         //perchè user non si mostra a schermo?
       )}
+=======
+      )} */}
+>>>>>>> 517d998e8192af3c4dfa0c6be2947052752acf35
     </>
   );
 }

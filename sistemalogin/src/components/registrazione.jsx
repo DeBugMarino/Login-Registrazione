@@ -1,8 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Registrazione() {
   const [data, setData] = useState({ id: 30 });
   const [message, setMessage] = useState(null);
+  const navigazione = useNavigate();
+
   function handleChange(event) {
     setData((prev) => ({
       ...prev,
@@ -18,9 +21,11 @@ export default function Registrazione() {
         body: JSON.stringify(data),
       });
       const result = await response.json();
-      console.log(result);
-      if (result.ok) {
+      if (response.ok) {
         setMessage(result.message);
+        setTimeout(() => {
+          navigazione("/login");
+        }, 5000);
       } else {
         setMessage(result.message);
       }
