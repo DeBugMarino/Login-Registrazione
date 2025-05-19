@@ -70,11 +70,11 @@ app.post("/login", (req, res) => {
 });
 
 
-app.put("utente/:id", (req, res) =>{
+app.put("/utente/:id", (req, res) =>{
   const {id} = req.params
   const { nome, cognome, eta, password } = req.body;
   const userExist = utenti.find(
-    (user) => user.id == id
+    (user) => user.id == id 
   );
   if(userExist){
     userExist.nome = nome;
@@ -87,6 +87,17 @@ app.put("utente/:id", (req, res) =>{
   } else {
     return res.status(404).json({ message: "Id non trovato" });
   }      
+})
+
+app.delete("/utente/:id", (req, res) => {
+  const { id } = req.params;
+  const userIndex = utenti.findIndex((user) => user.id == id);
+  if (userIndex !== -1) {
+    utenti.splice(userIndex, 1);
+    return res.status(200).json({ message: "Utente eliminato con successo" });
+  } else {
+    return res.status(404).json({ message: "Id non trovato" });
+  }
 })
 
 
