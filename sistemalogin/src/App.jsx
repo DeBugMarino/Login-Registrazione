@@ -5,13 +5,22 @@ import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
 import DashBoard from "./components/DashBoard";
 import { AuthProvider } from "./context/AuthContext";
 import Private from "./components/Private";
+import { ToastContainer, toast } from "react-toastify";
+
 function App() {
   return (
     <>
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<h1>Benvenuto nella hompage</h1>}></Route>
+            <Route
+              path="/"
+              element={
+                <>
+                  <h1>Benvenuto nella hompage</h1>
+                </>
+              }
+            ></Route>
             <Route
               path="/registrazione"
               element={<Registrazione></Registrazione>}
@@ -28,6 +37,7 @@ function App() {
             ></Route>
           </Routes>
         </BrowserRouter>
+        <ToastContainer />
       </AuthProvider>
     </>
   );

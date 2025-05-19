@@ -32,18 +32,22 @@ export default function Login() {
   return (
     <>
       <form onSubmit={handleSubmit}>
+        <label htmlFor="email">Email</label> <br />
         <input
           onChange={handleChange}
           name="email"
-          placeholder="email"
+          placeholder="Email"
           type="email"
         ></input>
+        <br /> <label htmlFor="password">Password</label> <br />
         <input
           onChange={handleChange}
           name="password"
-          placeholder="password"
+          placeholder="Password"
           type="password"
-        ></input>
+        ></input>{" "}
+        <br />
+        <br />
         <button type="submit">login</button>
       </form>
       {message && <p>{message}</p>}

@@ -36,11 +36,47 @@ export default function Registrazione() {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <input name="nome" onChange={handleChange} type="text"></input>
-        <input name="cognome" onChange={handleChange} type="text"></input>
-        <input name="email" onChange={handleChange} type="email"></input>
-        <input name="eta" onChange={handleChange} type="number"></input>
-        <input name="password" onChange={handleChange} type="password"></input>
+        <label htmlFor="nome">Nome</label> <br />
+        <input
+          name="nome"
+          onChange={handleChange}
+          type="text"
+          placeholder="Nome"
+        ></input>{" "}
+        <br />
+        <label htmlFor="cognome">Cognome</label> <br />
+        <input
+          name="cognome"
+          onChange={handleChange}
+          type="text"
+          placeholder="Cognome"
+        ></input>{" "}
+        <br />
+        <label htmlFor="email">Email</label> <br />
+        <input
+          name="email"
+          onChange={handleChange}
+          type="email"
+          placeholder="Email"
+        ></input>{" "}
+        <br />
+        <label htmlFor="eta">Età</label> <br />
+        <input
+          name="eta"
+          onChange={handleChange}
+          type="number"
+          placeholder="Età"
+        ></input>{" "}
+        <br />
+        <label htmlFor="password">Password</label> <br />
+        <input
+          name="password"
+          onChange={handleChange}
+          type="password"
+          placeholder="Password"
+        ></input>{" "}
+        <br />
+        <br />
         <button type="submit">Registrati</button>
       </form>
       {message && <p>{message}</p>}

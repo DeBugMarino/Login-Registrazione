@@ -28,6 +28,35 @@ app.get("/utente/:id", (req, res) => {
   }
 });
 
+app.delete("/utente/:id", (req, res) => {
+  const { id } = req.params;
+  const users = utenti.find((idUtente) => idUtente.id == id);
+  if (users) {
+    const indice = utenti.indexOf(users);
+    utenti.splice(indice, 1);
+    res.status(200).send({ message: "Utente cancellato con successo" });
+  } else {
+    res.status(404).send({ message: "utente non trovato" });
+  }
+});
+
+app.put("/utente/:id", (req, res) => {
+  const { id } = req.params;
+  const { nome, cognome, eta } = req.body;
+  const user = utenti.find((idUtente) => idUtente.id == id);
+
+  if (user) {
+    user.nome = nome;
+    user.cognome = cognome;
+    user.eta = eta;
+    return res.status(200).send({ message: "Utente modificato con successo" });
+  } else {
+    return res
+      .status(404)
+      .send({ message: "Modifica non avvenuta correttamente" });
+  }
+});
+
 app.post("/utente", (req, res) => {
   const { id, nome, cognome, email, eta, password } = req.body;
   const userExist = utenti.find(
