@@ -60,6 +60,7 @@ export default function Login() {
           <p>{user.email}</p>
           <p>{user.eta}</p>
         </div>
+        //perchè user non si mostra a schermo?
       )}
     </>
   );
