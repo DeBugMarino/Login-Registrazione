@@ -6,11 +6,17 @@ export default function DashBoard() {
   const{user, logout} = useAuth()
   const navigazione = useNavigate();
   const [mod, setMod]= useState({})
-  const [error, setError] =useState()
+  const [error, setError] =useState(false)
+  const [apri, setApri]= useState(false)
+  const [logOut, setLogout]= useState(false)
+
+
   function handleLogout(){
   logout()
-  navigazione("/")
+  setLogout(true)
+  // navigazione("/")
   }
+
   function handleChange(event){
   setMod((prev) => ({
     ...prev,
@@ -27,6 +33,7 @@ async function handleSubmit(event){
    const result = await response.json()
  } catch (error) {
    console.error("error")
+   setError("modifica non riuscita")
  }
 
 }
@@ -40,11 +47,12 @@ async function handleSubmit(event){
           <p>{user.email}</p>
           <p>{user.eta}</p>
           <button onClick={handleLogout}>Logout</button>
+          <button onClick={() => setApri(!apri)}>Modifica</button>
         </div>
 
       )}
 
-      <Form onSubmit={handleSubmit}>
+     { apri && <Form onSubmit={handleSubmit}>
         <input
         name="nome"
         placeholder="nome"
@@ -70,7 +78,12 @@ async function handleSubmit(event){
         onChange={ handleChange}
         ></input>
         <button type="submit">Modifica</button>
-      </Form>
+      </Form>}
+
+      {error && <p>{error}</p>}
+      {logOut && <p> Sei sicurro di voler uscire?</p>
+      <button >Annulla</button>
+      }
     </>
   );
 }
