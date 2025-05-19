@@ -69,6 +69,10 @@ app.post("/login", (req, res) => {
   }
 });
 
+app.delete("/", (req, res) => {
+  co;
+});
+
 app.listen(PORT, () => {
   console.log(`avviato il server su http://localhost:${PORT} `);
 });
