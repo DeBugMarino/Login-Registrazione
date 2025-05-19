@@ -69,6 +69,27 @@ app.post("/login", (req, res) => {
   }
 });
 
+
+app.put("utente/:id", (req, res) =>{
+  const {id} = req.params
+  const { nome, cognome, eta, password } = req.body;
+  const userExist = utenti.find(
+    (user) => user.id == id
+  );
+  if(userExist){
+    userExist.nome = nome;
+    userExist.cognome = cognome;
+    userExist.eta = eta;
+    userExist.password = password;
+    return res
+          .status(200)
+          .json({ message: "Modifica effettuata con successo", user: userExist });
+  } else {
+    return res.status(404).json({ message: "Id non trovato" });
+  }      
+})
+
+
 app.listen(PORT, () => {
   console.log(`avviato il server su http://localhost:${PORT} `);
 });

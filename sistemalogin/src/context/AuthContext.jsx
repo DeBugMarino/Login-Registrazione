@@ -26,13 +26,7 @@ export const AuthProvider = ({ children }) => {
         setUser(result.user);
         localStorage.setItem("user", JSON.stringify(result.user)); // <-- aggiunto
         return result.user;
-      // }
-      // if (response.ok) {
-      //   setMessage(result.message);
-      //   setUser(result.user);
-      //   console.log("if");
-      //   console.log(result.user);
-      //   return result.user;
+      
       } else {
         setMessage(result.message);
         setUser(null);
