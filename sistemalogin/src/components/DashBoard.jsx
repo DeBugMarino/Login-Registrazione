@@ -48,7 +48,6 @@ export default function DashBoard() {
   }
 
   async function handleSave(event) {
-    event.preventDefault();
     const idUtente = 30;
     try {
       const response = await fetch(`http://localhost:3000/utente/${idUtente}`, {
