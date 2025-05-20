@@ -1,9 +1,10 @@
-import { Form, Link, useNavigate } from "react-router-dom";
+import {  Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
 
+
 export default function DashBoard() {
-  const{user, logout} = useAuth()
+  const{user, logout, setUser} = useAuth()
   const navigazione = useNavigate();
   const [mod, setMod]= useState({})
   const [error, setError] =useState(false)
@@ -12,6 +13,8 @@ export default function DashBoard() {
   const [message, setMessage] = useState(false);
   const [cancel, setCancel] = useState(false);
 
+ 
+ 
 
   function handleLogout(){
   logout()
@@ -35,12 +38,15 @@ async function handleSubmit(event){
            body: JSON.stringify(mod),})
    const result = await response.json()
  setMessage("modifica effettuata con successo")
+ setUser(result.user)
+ localStorage.setItem("user", JSON.stringify(result.user))
+ navigazione(0)
  setTimeout(() => {
    setApri(false);
  }, 5000);
  } catch (error) {
    console.error("error")
-   setError("modifica non riuscita")
+   setError("Modifica non riuscita")
  }
 
 }
@@ -51,12 +57,14 @@ async function handleDelete(event){
            { method: "DELETE",
             headers: { "Content-type": "application/json" },})
     const result = await response.json()
-    setMessage("account eliminato con successo")
-    setCancel(true)
+    setMessage("Account eliminato con successo")
+    localStorage.removeItem("user")
+    // setCancel(true)
+    navigazione("/login")
    
   } catch (error) {
     console.error("error")
-    setError("eliminazione non riuscita")
+    setError("Eliminazione non riuscita")
   }}
 
   return (
@@ -117,18 +125,24 @@ async function handleDelete(event){
           <Link to="/">Si</Link>
         </div>
       )}
-      <button onClick={handleDelete}>Elimina account</button>
+
+      <div className="grid place-items-center h-dvh bg-zinc-950/80">
+      <button onClick= {() => setCancel(true)}>Elimina account</button>
+      </div>
+
       {cancel && (
-        <div>
+        <div  id="popUp"
+          className=" shadow-xl flex items-center justify-center z-50 bg-black bg-opacity-50">
           <p> Sei sicuro di voler eliminare l'account?</p>
           <button
+          
             onClick={() => {
               setCancel(false);
             }}
           >
             Annulla
           </button>
-          <Link to="/">Si</Link>
+          <button onClick={handleDelete}>Si</button>
         </div>
       )}
     </>

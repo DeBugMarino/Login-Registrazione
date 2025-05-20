@@ -23,6 +23,7 @@ export default function Login() {
         setTimeout(() => {
           navigazione("/dashboard");
         }, 5000);
+      
       }
     } catch (error) {
       console.error(error);
