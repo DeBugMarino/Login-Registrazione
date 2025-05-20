@@ -22,7 +22,7 @@ app.get("/utente/:id", (req, res) => {
   const { id } = req.params;
   const users = utenti.find((user) => user.id == id);
   if (users) {
-    res.json(utenti);
+    res.json(users);
   } else {
     res.status(404).send("id non trovato");
   }
