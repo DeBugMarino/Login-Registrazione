@@ -1,9 +1,11 @@
 import express from "express";
 import cors from "cors";
 import { utenti } from "./utenti.js";
+import jwt from "jsonwebtoken";
 
 const app = express();
 const PORT = 3000;
+const secretKey = "abcde12345";
 
 app.use(express.json());
 app.use(cors());
@@ -58,9 +60,17 @@ app.post("/login", (req, res) => {
         utente.password === password
     );
     if (userExist) {
+      const token = jwt.sign(
+        {
+          email: email,
+        },
+        secretKey,
+        { expiresIn: "1h" }
+      );
+
       return res
         .status(200)
-        .json({ message: "login effettuato con successo", user: userExist });
+        .json({ message: "login effettuato con successo", token });
     } else {
       return res.status(400).json({ message: "credenziali errate" });
     }
@@ -69,25 +79,37 @@ app.post("/login", (req, res) => {
   }
 });
 
+app.get("/profile", (req, res) => {
+  const auth = req.headers.authorization;
+  if (!auth) {
+    return res.status(401).json({ msg: "token mancante" });
+  }
+  const token = auth.split(" ")[1];
+  jwt.verify(token, secretKey, (err, decoded) => {
+    if (err) {
+      return res.status(403).json({ msg: "token non valido" });
+    }
+    const userExist = utenti.find((u) => u.email === decoded.email);
+    res.json(userExist);
+  });
+});
 
-app.put("/utente/:id", (req, res) =>{
-  const {id} = req.params
+app.put("/utente/:id", (req, res) => {
+  const { id } = req.params;
   const { nome, cognome, eta, password } = req.body;
-  const userExist = utenti.find(
-    (user) => user.id == id 
-  );
-  if(userExist){
+  const userExist = utenti.find((user) => user.id == id);
+  if (userExist) {
     userExist.nome = nome;
     userExist.cognome = cognome;
     userExist.eta = eta;
     userExist.password = password;
     return res
-          .status(200)
-          .json({ message: "Modifica effettuata con successo", user: userExist });
+      .status(200)
+      .json({ message: "Modifica effettuata con successo", user: userExist });
   } else {
     return res.status(404).json({ message: "Id non trovato" });
-  }      
-})
+  }
+});
 
 app.delete("/utente/:id", (req, res) => {
   const { id } = req.params;
@@ -98,8 +120,7 @@ app.delete("/utente/:id", (req, res) => {
   } else {
     return res.status(404).json({ message: "Id non trovato" });
   }
-})
-
+});
 
 app.listen(PORT, () => {
   console.log(`avviato il server su http://localhost:${PORT} `);

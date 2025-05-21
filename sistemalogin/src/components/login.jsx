@@ -23,7 +23,6 @@ export default function Login() {
         setTimeout(() => {
           navigazione("/dashboard");
         }, 5000);
-      
       }
     } catch (error) {
       console.error(error);
@@ -48,13 +47,6 @@ export default function Login() {
         <button type="submit">login</button>
       </form>
       {message && <p>{message}</p>}
-      {/* {user && (
-        <div>
-          <p>{user.nome}</p>
-          <p>{user.email}</p>
-          <p>{user.eta}</p>
-        </div>
-      )} */}
     </>
   );
 }
