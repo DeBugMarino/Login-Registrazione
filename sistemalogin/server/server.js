@@ -1,9 +1,12 @@
 import express from "express";
 import cors from "cors";
 import { utenti } from "./utenti.js";
+import jwt from "jsonwebtoken";
+import verify from "jsonwebtoken";
 
 const app = express();
 const PORT = 3000;
+const secretKey = "my_secret_key";
 
 app.use(express.json());
 app.use(cors());
@@ -87,15 +90,31 @@ app.post("/login", (req, res) => {
         utente.password === password
     );
     if (userExist) {
+      const token = jwt.sign({ email }, secretKey, { expiresIn: "1h" });
       return res
         .status(200)
-        .json({ message: "login effettuato con successo", user: userExist });
+        .json({ message: "login effettuato con successo", token });
     } else {
       return res.status(400).json({ message: "credenziali errate" });
     }
   } else {
     return res.status(404).json({ message: "inserisci email e password" });
   }
+});
+
+app.get("/dashboard", (req, res) => {
+  const auth = req.headers.authorization;
+  if (!auth) {
+    return res.status(401).json({ message: "token mancante" });
+  }
+  const token = auth.split(" ")[1];
+  jwt.verify(token, secretKey, (err, decoded) => {
+    if (err) {
+      return res.status(403).json({ message: "token non valido" });
+    }
+    const userExist = utenti.find((x) => x.email === decoded.email);
+    res.json({ userExist });
+  });
 });
 
 app.listen(PORT, () => {
