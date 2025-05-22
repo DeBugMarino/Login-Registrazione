@@ -103,7 +103,7 @@ export default function DashBoard() {
     })
       .then((response) => response.json())
       .then((result) => {
-        setData(result), console.log(result);
+        setData(result.userExist), console.log(result);
       })
       .catch((error) => console.error(error));
 
