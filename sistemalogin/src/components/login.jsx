@@ -18,7 +18,7 @@ export default function Login() {
     event.preventDefault();
     try {
       const logged = await login(data);
-      console.log(logged);
+      
       if (logged) {
         setTimeout(() => {
           navigazione("/dashboard");
