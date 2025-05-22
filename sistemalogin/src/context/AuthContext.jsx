@@ -7,9 +7,9 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [message, setMessage] = useState(null);
-    const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser) : null;
+    const [token, setToken] = useState(() => {
+    const storedToken = localStorage.getItem("token");
+    return storedToken ? JSON.parse(storedToken) : null;
   });
 
   async function login(data) {
@@ -23,29 +23,29 @@ export const AuthProvider = ({ children }) => {
       const result = await response.json();
       if (response.ok) {
         setMessage(result.message);
-        setUser(result.user);
-        localStorage.setItem("user", JSON.stringify(result.user)); // <-- aggiunto
-        return result.user;
+        setToken(result.token);
+        localStorage.setItem("token", JSON.stringify(result.token)); // <-- aggiunto
+        return result.token;
       
       } else {
         setMessage(result.message);
-        setUser(null);
+        setToken(null);
         console.log("else");
       }
     } catch (error) {
       console.log("catch");
       console.error(error);
       setMessage("errore");
-      setUser(null);
+      setToken(null);
     }
   }
   function logout(){
-    localStorage.removeItem("user")
+    localStorage.removeItem("token")
 
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, message, logout }}>
+    <AuthContext.Provider value={{ token, login, message, logout , setToken}}>
       {children}
     </AuthContext.Provider>
   );
