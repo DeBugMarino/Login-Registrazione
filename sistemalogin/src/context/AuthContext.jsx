@@ -7,8 +7,8 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [message, setMessage] = useState(null);
-    const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem("user");
+  const [token, setToken] = useState(() => {
+    const storedUser = localStorage.getItem("token");
     return storedUser ? JSON.parse(storedUser) : null;
   });
 
@@ -23,35 +23,34 @@ export const AuthProvider = ({ children }) => {
       const result = await response.json();
       if (response.ok) {
         setMessage(result.message);
-        setUser(result.user);
-        localStorage.setItem("user", JSON.stringify(result.user)); // <-- aggiunto
-        return result.user;
-      // }
-      // if (response.ok) {
-      //   setMessage(result.message);
-      //   setUser(result.user);
-      //   console.log("if");
-      //   console.log(result.user);
-      //   return result.user;
+        setToken(result.token);
+        localStorage.setItem("token", JSON.stringify(result.token)); // <-- aggiunto
+        return result.token;
+        // }
+        // if (response.ok) {
+        //   setMessage(result.message);
+        //   setUser(result.user);
+        //   console.log("if");
+        //   console.log(result.user);
+        //   return result.user;
       } else {
         setMessage(result.message);
-        setUser(null);
+        setToken(null);
         console.log("else");
       }
     } catch (error) {
       console.log("catch");
       console.error(error);
       setMessage("errore");
-      setUser(null);
+      setToken(null);
     }
   }
-  function logout(){
-    localStorage.removeItem("user")
-
+  function logout() {
+    localStorage.removeItem("token");
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, message, logout }}>
+    <AuthContext.Provider value={{ token, login, message, logout }}>
       {children}
     </AuthContext.Provider>
   );

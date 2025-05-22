@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
   const [data, setData] = useState({});
-  const { user, login, message } = useAuth();
+  const { token, login, message } = useAuth();
   const navigazione = useNavigate();
 
   function handleChange(event) {

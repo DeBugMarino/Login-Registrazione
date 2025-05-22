@@ -1,13 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function DashBoard() {
-  const { user, logout } = useAuth();
+  const { logout, token } = useAuth();
   const navigazione = useNavigate();
   const [modifica, setModifica] = useState(false);
-  const [data, setData] = useState(user);
+  const [data, setData] = useState({});
 
   const notificaSuccesso = (msg) =>
     toast.success(msg, {
@@ -97,6 +97,19 @@ export default function DashBoard() {
     }
   }
 
+  useEffect(() => {
+    fetch(`http://localhost:3000/dashboard`, {
+      headers: { Authorization: `bearer ${token}` },
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        setData(result), console.log(result);
+      })
+      .catch((error) => console.error(error));
+
+    console.log(data);
+  }, []);
+
   return (
     <>
       <h1>Dashboard</h1>
@@ -134,11 +147,11 @@ export default function DashBoard() {
         <button onClick={handleModifica}>Modifica i tuoi dati</button>
       )}
 
-      {user && (
+      {data && (
         <div>
-          <p>{user.nome}</p>
-          <p>{user.email}</p>
-          <p>{user.eta}</p>
+          <p>{data.nome}</p>
+          <p>{data.email}</p>
+          <p>{data.eta}</p>
           <button onClick={handleLogout}>Logout</button>
           <button onClick={handleDelete}> Cancella il tuo account</button>
         </div>
