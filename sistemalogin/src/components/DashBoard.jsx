@@ -35,10 +35,11 @@ useEffect(() => {
       Authorization: `Bearer ${token}`,
     },
   })
-  .then((response) => {response.json()})
+  .then((response) => { return response.json()})
   .then((data) => { 
     setUser(data)
-    console.log(user)
+   
+    
   })
   .catch((error) => {
     console.error(error)
@@ -88,7 +89,7 @@ async function handleDelete(event){
   return (
     <>
       <h1>Dashboard</h1>
-      {user && (
+      { user && (
         <div>
           <p>{user.nome}</p>
           <p>{user.email}</p>
