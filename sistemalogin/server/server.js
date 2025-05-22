@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import { utenti } from "./utenti.js";
 import jwt from "jsonwebtoken";
-import verify from "jsonwebtoken";
 
 const app = express();
 const PORT = 3000;
