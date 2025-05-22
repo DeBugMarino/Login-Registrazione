@@ -1,10 +1,10 @@
 import {  Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 
 export default function DashBoard() {
-  const{user, logout, setUser} = useAuth()
+  const{token, setToken, logout} = useAuth()
   const navigazione = useNavigate();
   const [mod, setMod]= useState({})
   const [error, setError] =useState(false)
@@ -12,8 +12,8 @@ export default function DashBoard() {
   const [logOut, setLogout]= useState(false)
   const [message, setMessage] = useState(false);
   const [cancel, setCancel] = useState(false);
-
- 
+  const [user, setUser] = useState()
+  
  
 
   function handleLogout(){
@@ -28,6 +28,24 @@ export default function DashBoard() {
     [event.target.name]: event.target.value,
   }));
 }
+
+useEffect(() => {
+  fetch(`http://localhost:3000/profile`, {
+    headers:{
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  .then((response) => {response.json()})
+  .then((data) => { 
+    setUser(data)
+    console.log(user)
+  })
+  .catch((error) => {
+    console.error(error)
+    navigazione("/login")})
+},[])
+
+
 async function handleSubmit(event){
  event.preventDefault()
 
