@@ -34,7 +34,7 @@ app.get("/utente/:id", async (req, res) => {
 
 app.delete("/utente/:id", async (req, res) => {
   const { id } = req.params;
-  try{
+  try {
     await db.none(`DELETE FROM utenti WHERE id=$1`, [id]);
     res.status(200).json({ message: "Utente cancellato con successo" });
   } catch (error) {
@@ -45,35 +45,34 @@ app.delete("/utente/:id", async (req, res) => {
 app.put("/utente/:id", async (req, res) => {
   const { id } = req.params;
   const { nome, cognome, eta } = req.body;
-  
+
   try {
-  await db.none( `UPDATE utenti SET nome=$1, cognome=$2, eta=$3 WHERE id=$4`, [ nome, cognome, eta, id])
+    await db.none(`UPDATE utenti SET nome=$1, cognome=$2, eta=$3 WHERE id=$4`, [
+      nome,
+      cognome,
+      eta,
+      id,
+    ]);
     return res.status(200).json({ message: "Utente modificato con successo" });
   } catch (error) {
-    return res
-      .status(404)
-      .json({ message: error.message });
+    return res.status(404).json({ message: error.message });
   }
 });
 
-app.post("/utente", (req, res) => {
-  const { id, nome, cognome, email, eta, password } = req.body;
-  const userExist = utenti.find(
-    (user) => user.email.toLowerCase() === email.toLowerCase()
-  );
-  if (userExist) {
-    return res.status(404).json({ message: "utente già registrato" });
-  } else {
-    const newUser = {
-      id: id,
-      nome: nome,
-      cognome: cognome,
-      email: email,
-      eta: eta,
-      password: password,
-    };
-    utenti.push(newUser);
+app.post("/utente", async (req, res) => {
+  const { nome, cognome, email, eta, password } = req.body;
+
+  try {
+    await db.none(
+      `INSERT INTO utenti ( nome, cognome, email , eta , password )
+      VALUES
+      ($1, $2, $3, $4, $5)
+      `,
+      [nome, cognome, email, eta, password]
+    );
     return res.status(201).json({ message: "utente registrato con successo" });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
   }
 });
 
