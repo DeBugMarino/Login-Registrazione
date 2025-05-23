@@ -5,7 +5,7 @@ const db = dataBase({
   host: "localhost",
   port: 5432,
 
-  database: "postgres",
+  database: "postgress",
 
   user: "postgres",
   password: "postgres",

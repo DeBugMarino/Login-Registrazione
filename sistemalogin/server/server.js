@@ -32,32 +32,27 @@ app.get("/utente/:id", async (req, res) => {
   }
 });
 
-app.delete("/utente/:id", (req, res) => {
+app.delete("/utente/:id", async (req, res) => {
   const { id } = req.params;
-  const users = utenti.find((idUtente) => idUtente.id == id);
-  if (users) {
-    const indice = utenti.indexOf(users);
-    utenti.splice(indice, 1);
-    res.status(200).send({ message: "Utente cancellato con successo" });
-  } else {
-    res.status(404).send({ message: "utente non trovato" });
+  try{
+    await db.none(`DELETE FROM utenti WHERE id=$1`, [id]);
+    res.status(200).json({ message: "Utente cancellato con successo" });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
   }
 });
 
-app.put("/utente/:id", (req, res) => {
+app.put("/utente/:id", async (req, res) => {
   const { id } = req.params;
   const { nome, cognome, eta } = req.body;
-  const user = utenti.find((idUtente) => idUtente.id == id);
-
-  if (user) {
-    user.nome = nome;
-    user.cognome = cognome;
-    user.eta = eta;
-    return res.status(200).send({ message: "Utente modificato con successo" });
-  } else {
+  
+  try {
+  await db.none( `UPDATE utenti SET nome=$1, cognome=$2, eta=$3 WHERE id=$4`, [ nome, cognome, eta, id])
+    return res.status(200).json({ message: "Utente modificato con successo" });
+  } catch (error) {
     return res
       .status(404)
-      .send({ message: "Modifica non avvenuta correttamente" });
+      .json({ message: error.message });
   }
 });
 
