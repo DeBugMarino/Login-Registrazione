@@ -4,7 +4,7 @@ const dataBase = pgPromise();
 const db = dataBase({
   host: "localhost",
   port: 5432,
-  database: "postgress",
+  database: "postgres",
   user: "postgres",
   password: "postgres",
 });
