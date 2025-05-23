@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import { utenti } from "./utenti.js";
 import jwt from "jsonwebtoken";
+import db from "../database/db.js";
 
 const app = express();
 const PORT = 3000;
@@ -10,13 +11,14 @@ const secretKey = "my_secret_key";
 app.use(express.json());
 app.use(cors());
 
-app.get("/", (req, res) => {
-  if (utenti) {
-    res.json(utenti);
-  } else if (utenti.length) {
-    res.status(404).send("errore utenti non trovati");
-  } else {
-    res.status(404).send("errore la pagina non è stata trovata");
+app.get("/", async (req, res) => {
+  try {
+    const users = await db.many(`SELECT * FROM utenti`);
+    res.status(200).json(users);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: `Errore durante la richiesta ${error.message}` });
   }
 });
 
