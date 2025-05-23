@@ -29,6 +29,7 @@ export const utenti = [
     cognome: "Neri",
     email: "sara.neri@example.com",
     eta: 30,
+     password: "12345",
   },
   {
     id: 5,
@@ -36,6 +37,7 @@ export const utenti = [
     cognome: "Russo",
     email: "alessandro.russo@example.com",
     eta: 40,
+     password: "12345",
   },
   {
     id: 6,
@@ -43,6 +45,7 @@ export const utenti = [
     cognome: "Gallo",
     email: "elena.gallo@example.com",
     eta: 22,
+     password: "12345",
   },
   {
     id: 7,
@@ -50,6 +53,7 @@ export const utenti = [
     cognome: "Fontana",
     email: "davide.fontana@example.com",
     eta: 27,
+     password: "12345",
   },
   {
     id: 8,
@@ -57,6 +61,7 @@ export const utenti = [
     cognome: "Colombo",
     email: "martina.colombo@example.com",
     eta: 33,
+     password: "12345",
   },
   {
     id: 9,
@@ -64,6 +69,7 @@ export const utenti = [
     cognome: "Ferrari",
     email: "francesco.ferrari@example.com",
     eta: 29,
+     password: "12345",
   },
   {
     id: 10,
@@ -71,6 +77,7 @@ export const utenti = [
     cognome: "Conti",
     email: "chiara.conti@example.com",
     eta: 31,
+     password: "12345",
   },
   {
     id: 11,
@@ -78,6 +85,7 @@ export const utenti = [
     cognome: "Marino",
     email: "andrea.marino@example.com",
     eta: 26,
+     password: "12345",
   },
   {
     id: 12,
@@ -85,6 +93,7 @@ export const utenti = [
     cognome: "De Luca",
     email: "laura.deluca@example.com",
     eta: 35,
+     password: "12345",
   },
   {
     id: 13,
@@ -92,6 +101,7 @@ export const utenti = [
     cognome: "Romano",
     email: "stefano.romano@example.com",
     eta: 38,
+     password: "12345",
   },
   {
     id: 14,
@@ -99,6 +109,7 @@ export const utenti = [
     cognome: "Costa",
     email: "federica.costa@example.com",
     eta: 24,
+     password: "12345",
   },
   {
     id: 15,
@@ -106,6 +117,7 @@ export const utenti = [
     cognome: "Ricci",
     email: "giorgio.ricci@example.com",
     eta: 37,
+     password: "12345",
   },
   {
     id: 16,
@@ -113,6 +125,7 @@ export const utenti = [
     cognome: "Greco",
     email: "valentina.greco@example.com",
     eta: 32,
+     password: "12345",
   },
   {
     id: 17,
@@ -120,6 +133,7 @@ export const utenti = [
     cognome: "Lombardi",
     email: "matteo.lombardi@example.com",
     eta: 23,
+     password: "12345",
   },
   {
     id: 18,
@@ -127,6 +141,7 @@ export const utenti = [
     cognome: "Moretti",
     email: "ilaria.moretti@example.com",
     eta: 36,
+     password: "12345",
   },
   {
     id: 19,
@@ -134,6 +149,7 @@ export const utenti = [
     cognome: "Barbieri",
     email: "simone.barbieri@example.com",
     eta: 39,
+     password: "12345",
   },
   {
     id: 20,
@@ -141,5 +157,6 @@ export const utenti = [
     cognome: "Giordano",
     email: "angela.giordano@example.com",
     eta: 41,
+     password: "12345",
   },
 ];
