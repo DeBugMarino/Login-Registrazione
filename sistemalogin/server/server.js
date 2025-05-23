@@ -22,13 +22,13 @@ app.get("/", async (req, res) => {
   }
 });
 
-app.get("/utente/:id", (req, res) => {
-  const { id } = req.params;
-  const users = utenti.find((user) => user.id == id);
-  if (users) {
-    res.json(utenti);
-  } else {
-    res.status(404).send("id non trovato");
+app.get("/utente/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const utente = await db.one(`SELECT * FROM utenti WHERE id=$1`, [id]);
+    res.status(200).json(utente);
+  } catch (error) {
+    res.status(404).json({ message: `utente non trovato ` });
   }
 });
 
