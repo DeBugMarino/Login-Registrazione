@@ -3,10 +3,13 @@ import cors from "cors";
 import { utenti } from "./utenti.js";
 import jwt from "jsonwebtoken";
 import db from "../database/db.js";
+import dotenv from "dotenv";
 
+dotenv.config();
 const app = express();
-const PORT = 3000;
-const secretKey = "my_secret_key";
+const PORT = parseInt(process.env.VITE_PORT) || 3000;
+const secretKey = process.env.VITE_JSON_SECRET_KEY
+
 
 app.use(express.json());
 app.use(cors());

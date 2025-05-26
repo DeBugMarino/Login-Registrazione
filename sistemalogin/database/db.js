@@ -1,14 +1,13 @@
 import pgPromise from "pg-promise";
-
+import dotenv from "dotenv";
+dotenv.config();
 const dataBase = pgPromise();
 const db = dataBase({
   host: "localhost",
   port: 5432,
-
-  database: "postgress",
-
+  database: process.env.VITE_NOME_DATABASE,
   user: "postgres",
-  password: "postgres",
+  password: process.env.VITE_PASSWORD_DATABASE,
 });
 
 db.none(
