@@ -76,21 +76,26 @@ app.post("/utente", async (req, res) => {
   }
 });
 
-app.post("/login", (req, res) => {
+app.post("/login", async (req, res) => {
   const { email, password } = req.body;
+
   if (email && password) {
-    const userExist = utenti.find(
-      (utente) =>
-        utente.email.toLowerCase() === email.toLowerCase() &&
-        utente.password === password
-    );
-    if (userExist) {
-      const token = jwt.sign({ email }, secretKey, { expiresIn: "1h" });
-      return res
-        .status(200)
-        .json({ message: "login effettuato con successo", token });
-    } else {
-      return res.status(400).json({ message: "credenziali errate" });
+    try {
+      const userExist = await db.oneOrNone(
+        `SELECT * FROM utenti WHERE email=$1 AND password=$2`,
+        [email, password]
+      );
+
+      if (userExist) {
+        const token = jwt.sign({ email }, secretKey, { expiresIn: "1h" });
+        return res
+          .status(200)
+          .json({ message: "login effettuato con successo", token });
+      } else {
+        return res.status(400).json({ message: "credenziali errate" });
+      }
+    } catch (error) {
+      return res.status(400).json({ message: error.message });
     }
   } else {
     return res.status(404).json({ message: "inserisci email e password" });
