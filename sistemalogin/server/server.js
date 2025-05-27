@@ -4,12 +4,13 @@ import { utenti } from "./utenti.js";
 import jwt from "jsonwebtoken";
 import db from "../database/db.js";
 import dotenv from "dotenv";
+import bcrypt from "bcrypt";
 
 dotenv.config();
 const app = express();
 const PORT = parseInt(process.env.VITE_PORT) || 3000;
-const secretKey = process.env.VITE_JSON_SECRET_KEY
-
+const secretKey = process.env.VITE_JSON_SECRET_KEY;
+const salto = parseInt(process.env.VITE_SALTO);
 
 app.use(express.json());
 app.use(cors());
@@ -66,12 +67,13 @@ app.post("/utente", async (req, res) => {
   const { nome, cognome, email, eta, password } = req.body;
 
   try {
+    const passwordCryptata = await bcrypt.hash(password, salto);
     await db.none(
       `INSERT INTO utenti ( nome, cognome, email , eta , password )
       VALUES
       ($1, $2, $3, $4, $5)
       `,
-      [nome, cognome, email, eta, password]
+      [nome, cognome, email, eta, passwordCryptata]
     );
     return res.status(201).json({ message: "utente registrato con successo" });
   } catch (error) {
@@ -85,11 +87,12 @@ app.post("/login", async (req, res) => {
   if (email && password) {
     try {
       const userExist = await db.oneOrNone(
-        `SELECT * FROM utenti WHERE email=$1 AND password=$2`,
-        [email, password]
+        `SELECT * FROM utenti WHERE email=$1`,
+        [email]
       );
-
-      if (userExist) {
+      const hashedPassword = userExist.password;
+      const isTrue = await bcrypt.compare(password, hashedPassword);
+      if (isTrue) {
         const token = jwt.sign({ email }, secretKey, { expiresIn: "1h" });
         return res
           .status(200)
