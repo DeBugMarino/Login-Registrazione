@@ -90,15 +90,19 @@ app.post("/login", async (req, res) => {
         `SELECT * FROM utenti WHERE email=$1`,
         [email]
       );
-      const hashedPassword = userExist.password;
-      const isTrue = await bcrypt.compare(password, hashedPassword);
-      if (isTrue) {
-        const token = jwt.sign({ email }, secretKey, { expiresIn: "1h" });
-        return res
-          .status(200)
-          .json({ message: "login effettuato con successo", token });
+      if (userExist) {
+        const hashedPassword = userExist.password;
+        const isTrue = await bcrypt.compare(password, hashedPassword);
+        if (isTrue) {
+          const token = jwt.sign({ email }, secretKey, { expiresIn: "1h" });
+          return res
+            .status(200)
+            .json({ message: "login effettuato con successo", token });
+        } else {
+          return res.status(400).json({ message: "credenziali errate" });
+        }
       } else {
-        return res.status(400).json({ message: "credenziali errate" });
+        return res.status(404).json({ message: "credenziali errate" });
       }
     } catch (error) {
       return res.status(400).json({ message: error.message });
@@ -108,19 +112,26 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/dashboard", (req, res) => {
+app.get("/dashboard", async (req, res) => {
   const auth = req.headers.authorization;
-  if (!auth) {
-    return res.status(401).json({ message: "token mancante" });
-  }
-  const token = auth.split(" ")[1];
-  jwt.verify(token, secretKey, (err, decoded) => {
-    if (err) {
-      return res.status(403).json({ message: "token non valido" });
+
+  try {
+    if (!auth) {
+      return res.status(401).json({ message: "token mancante" });
     }
-    const userExist = utenti.find((x) => x.email === decoded.email);
-    res.json({ userExist });
-  });
+    const token = auth.split(" ")[1];
+    jwt.verify(token, secretKey, async (err, decoded) => {
+      if (err) {
+        return res.status(403).json({ message: "token non valido" });
+      }
+      const userExist = await db.one("SELECT * FROM utenti WHERE email=$1 ", [
+        decoded.email,
+      ]);
+      res.json({ userExist });
+    });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
 });
 
 app.listen(PORT, () => {

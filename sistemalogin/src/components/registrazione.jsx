@@ -25,7 +25,7 @@ export default function Registrazione() {
         setMessage(result.message);
         setTimeout(() => {
           navigazione("/login");
-        }, 5000);
+        }, 1000);
       } else {
         setMessage(result.message);
       }

@@ -48,9 +48,8 @@ export default function DashBoard() {
   }
 
   async function handleSave(event) {
-    const idUtente = 30;
     try {
-      const response = await fetch(`http://localhost:3000/utente/${idUtente}`, {
+      const response = await fetch(`http://localhost:3000/utente/${data.id}`, {
         method: "PUT",
         headers: { "Content-type": "application/json" },
         body: JSON.stringify(data),
@@ -71,11 +70,11 @@ export default function DashBoard() {
 
   async function handleDelete(event) {
     event.preventDefault();
-    const idUtente = 30;
+
     if (confirm("Sei sicuro di eliminare il tuo account? ")) {
       try {
         const response = await fetch(
-          `http://localhost:3000/utente/${idUtente}`,
+          `http://localhost:3000/utente/${data.id}`,
           {
             method: "DELETE",
           }
