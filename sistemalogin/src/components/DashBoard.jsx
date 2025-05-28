@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
 import { useEffect, useState } from "react";
+import placeholder from '../assets/placeholder.webp'
 
 export default function DashBoard() {
   const { logout, token } = useAuth();
@@ -148,6 +149,8 @@ export default function DashBoard() {
 
       {data && (
         <div>
+          <img src={data.img || placeholder } alt="img profilo"
+          className="imgProfilo"></img>
           <p>{data.nome}</p>
           <p>{data.email}</p>
           <p>{data.eta}</p>
