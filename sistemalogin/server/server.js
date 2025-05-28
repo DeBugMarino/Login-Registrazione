@@ -5,6 +5,11 @@ import jwt from "jsonwebtoken";
 import db from "../database/db.js";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
+import multer from "multer";
+
+const upload = multer({
+  dest: "uploads/",
+});
 
 dotenv.config();
 const app = express();
@@ -132,6 +137,11 @@ app.get("/dashboard", async (req, res) => {
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }
+});
+
+app.post("/uploads", upload.single("file"), (req, res) => {
+  console.log(req.file);
+  res.send("File caricato con successo");
 });
 
 app.listen(PORT, () => {

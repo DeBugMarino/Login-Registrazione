@@ -3,7 +3,7 @@
 import db from "../database/db.js";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
-dotenv.config()
+dotenv.config();
 
 async function cryptingPassword() {
   const salto = parseInt(process.env.VITE_SALTO);
@@ -12,13 +12,15 @@ async function cryptingPassword() {
     salvaPassword.forEach(async (utente) => {
       const { password, id } = utente;
       const passwordCryptata = await bcrypt.hash(password, salto);
-      await db.none(`UPDATE utenti SET password=$1 WHERE id=$2`, [passwordCryptata, id])
-      
-     console.log("operazione di criptaggio completata!")
+      await db.none(`UPDATE utenti SET password=$1 WHERE id=$2`, [
+        passwordCryptata,
+        id,
+      ]);
     });
-  } catch(error) {
-     console.error(error)
+    console.log("operazione di criptaggio completata!");
+  } catch (error) {
+    console.error(error);
   }
 }
-// cryptingPassword()
+// cryptingPassword();
 //  ATTENZIONE: NON ESEGUIRE PIù VOLTE

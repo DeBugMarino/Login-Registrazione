@@ -2,13 +2,14 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import placeholder from '../assets/placeholder.webp'
+import placeholder from "../assets/placeholder.webp";
 
 export default function DashBoard() {
   const { logout, token } = useAuth();
   const navigazione = useNavigate();
   const [modifica, setModifica] = useState(false);
   const [data, setData] = useState({});
+  const [caricaImmagine, setCaricaImmagine] = useState(false);
 
   const notificaSuccesso = (msg) =>
     toast.success(msg, {
@@ -110,6 +111,11 @@ export default function DashBoard() {
     console.log(data);
   }, []);
 
+  async function handleUpload(event) {
+    event.preventDefault();
+    setCaricaImmagine(false);
+  }
+
   return (
     <>
       <h1>Dashboard</h1>
@@ -149,8 +155,22 @@ export default function DashBoard() {
 
       {data && (
         <div>
-          <img src={data.img || placeholder } alt="img profilo"
-          className="imgProfilo"></img>
+          <img
+            src={data.img || placeholder}
+            alt="img profilo"
+            className="imgProfilo"
+          ></img>
+          {!caricaImmagine && (
+            <button onClick={() => setCaricaImmagine(!caricaImmagine)}>
+              Carica immagine Profilo
+            </button>
+          )}
+          {caricaImmagine && (
+            <form onSubmit={handleUpload}>
+              <input type="file"></input>
+              <button type="submit">Carica immagine</button>
+            </form>
+          )}
           <p>{data.nome}</p>
           <p>{data.email}</p>
           <p>{data.eta}</p>
