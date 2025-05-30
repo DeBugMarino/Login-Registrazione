@@ -106,14 +106,31 @@ export default function DashBoard() {
     })
       .then((response) => response.json())
       .then((result) => {
-        setData(result.userExist),
-          setImmagine(result.userExist.immagine.blob());
+        setData(result.userExist);
       })
       .catch((error) => console.error(error));
   }, []);
 
+  useEffect(() => {
+    fetch(`http://localhost:3000/immagine/${data.id}`)
+      .then((response) => {
+        console.log(response);
+        // console.log(response.blob());
+        return response.blob();
+      })
+      .then((blob) => {
+        console.log(blob);
+        console.log(blob.size);
+        console.log(blob.type);
+        setImmagine(URL.createObjectURL(blob));
+      })
+      .catch((error) => {
+        setImmagine(null), console.error(error.message);
+      });
+  }, [data]);
+
   async function handleUpload(event) {
-    event.preventDefault();
+    // event.preventDefault();
 
     try {
       const fileUpload = new FormData();

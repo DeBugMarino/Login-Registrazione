@@ -159,6 +159,22 @@ app.post("/:id/uploads", upload.single("image"), async (req, res) => {
   }
 });
 
+app.get("/immagine/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const immagine = await db.one(
+      `SELECT immagine, mime_type FROM utenti WHERE id=$1`,
+      [id]
+    );
+    res.set("Content-Type", immagine.mime_type);
+    res.send(immagine.immagine);
+    console.log(immagine.immagine);
+    console.log(immagine.mime_type);
+  } catch (error) {
+    res.status(400).json({ message: "Immagine non trovata" });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`avviato il server su http://localhost:${PORT} `);
 });
