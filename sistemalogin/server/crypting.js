@@ -17,10 +17,13 @@ async function cryptingPassword() {
         id,
       ]);
     });
+
     console.log("operazione di criptaggio completata!");
   } catch (error) {
     console.error(error);
   }
 }
+
 // cryptingPassword();
+
 //  ATTENZIONE: NON ESEGUIRE PIù VOLTE
