@@ -107,31 +107,21 @@ export default function DashBoard() {
       .then((response) => response.json())
       .then((result) => {
         setData(result.userExist);
+        fetch(`http://localhost:3000/immagine/${result.userExist.id}`)
+          .then((response) => {
+            return response.blob();
+          })
+          .then((blob) => {
+            setImmagine(URL.createObjectURL(blob));
+          })
+          .catch((error) => {
+            setImmagine(null), console.error(error.message);
+          });
       })
       .catch((error) => console.error(error));
   }, []);
 
-  useEffect(() => {
-    fetch(`http://localhost:3000/immagine/${data.id}`)
-      .then((response) => {
-        console.log(response);
-        // console.log(response.blob());
-        return response.blob();
-      })
-      .then((blob) => {
-        console.log(blob);
-        console.log(blob.size);
-        console.log(blob.type);
-        setImmagine(URL.createObjectURL(blob));
-      })
-      .catch((error) => {
-        setImmagine(null), console.error(error.message);
-      });
-  }, [data]);
-
-  async function handleUpload(event) {
-    // event.preventDefault();
-
+  async function handleUpload() {
     try {
       const fileUpload = new FormData();
       fileUpload.append("image", file);
