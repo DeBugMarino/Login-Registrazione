@@ -5,6 +5,10 @@ import jwt from "jsonwebtoken";
 import db from "../database/db.js";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
+import multer from "multer";
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 dotenv.config();
 const app = express();
@@ -131,6 +135,27 @@ app.get("/dashboard", async (req, res) => {
     });
   } catch (error) {
     return res.status(400).json({ message: error.message });
+  }
+});
+
+app.post("/:id/uploads", upload.single("image"), async (req, res) => {
+  const { id } = req.params;
+  const { mimetype, buffer } = req.file;
+
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "Non hai caricato nessun file" });
+    }
+    await db.none(`UPDATE utenti SET immagine=$1, mime_type=$2 WHERE id=$3 `, [
+      buffer,
+      mimetype,
+      id,
+    ]);
+    res.status(201).json({ message: "File caricato con successo" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "errore nel caricamento del file: " + error.message });
   }
 });
 

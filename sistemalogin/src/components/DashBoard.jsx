@@ -2,13 +2,16 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import placeholder from '../assets/placeholder.webp'
+import placeholder from "../assets/placeholder.webp";
 
 export default function DashBoard() {
   const { logout, token } = useAuth();
   const navigazione = useNavigate();
   const [modifica, setModifica] = useState(false);
   const [data, setData] = useState({});
+  const [caricaImmagine, setCaricaImmagine] = useState(false);
+  const [file, setFile] = useState(null);
+  const [immagine, setImmagine] = useState(null);
 
   const notificaSuccesso = (msg) =>
     toast.success(msg, {
@@ -103,12 +106,29 @@ export default function DashBoard() {
     })
       .then((response) => response.json())
       .then((result) => {
-        setData(result.userExist), console.log(result);
+        setData(result.userExist),
+          setImmagine(result.userExist.immagine.blob());
       })
       .catch((error) => console.error(error));
-
-    console.log(data);
   }, []);
+
+  async function handleUpload(event) {
+    event.preventDefault();
+
+    try {
+      const fileUpload = new FormData();
+      fileUpload.append("image", file);
+      const response = await fetch(`http://localhost:3000/${data.id}/uploads`, {
+        method: "POST",
+        body: fileUpload,
+      });
+      const result = await response.json();
+      alert(result.message);
+      setCaricaImmagine(false);
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
 
   return (
     <>
@@ -149,8 +169,26 @@ export default function DashBoard() {
 
       {data && (
         <div>
-          <img src={data.img || placeholder } alt="img profilo"
-          className="imgProfilo"></img>
+          <img
+            src={immagine || placeholder}
+            alt="img profilo"
+            className="imgProfilo"
+          ></img>
+          {!caricaImmagine && (
+            <button onClick={() => setCaricaImmagine(!caricaImmagine)}>
+              Carica immagine Profilo
+            </button>
+          )}
+          {caricaImmagine && (
+            <form onSubmit={handleUpload}>
+              <input
+                type="file"
+                onChange={(event) => setFile(event.target.files[0])}
+                accept="image/*"
+              ></input>
+              <button type="submit">Carica immagine</button>
+            </form>
+          )}
           <p>{data.nome}</p>
           <p>{data.email}</p>
           <p>{data.eta}</p>
